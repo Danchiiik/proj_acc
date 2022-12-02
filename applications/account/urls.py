@@ -8,7 +8,9 @@ urlpatterns = [
     path('login/', LoginApiView.as_view()),
     path('logout/', LogoutApiView.as_view()),
     path('change_password/', Change_passwordApiView.as_view()),
-    path('send_mail/', send_hello_api_view)
+    path('send_mail/', send_hello_api_view),
+    path('activate/<uuid:activation_code>/', ActivationApiView.as_view())
+    
 ]
 
 

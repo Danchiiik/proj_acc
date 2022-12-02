@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 
+from applications.account.send_mail import send_confirmation_email
+
 User = get_user_model()
 
 
@@ -34,7 +36,10 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         
-        # TODO: create send massage
+        code = user.activation_code
+        send_confirmation_email(user.email, code)
+        
+        
         user.is_active = True
         
         return user

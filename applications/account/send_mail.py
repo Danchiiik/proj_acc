@@ -7,3 +7,13 @@ def send_hello(email):
         'dcabatar@gmail.com', #from
         [email] #to   
     )
+    
+    
+def send_confirmation_email(email, code):
+    full_link = f'http://localhost:8000/account/activate/{code}'
+    send_mail(
+        'User activation',
+        full_link,
+        'dcabatar@gmail.com',
+        [email],
+    )
