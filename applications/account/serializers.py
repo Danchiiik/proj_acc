@@ -19,7 +19,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ['email', 'password', 'password2']
         
         
-    # def validate_email(self, email):
+    # def validate_email(self,https://www.thunderclient.com/welcome email):
     #     print(email)
     #     return email
 

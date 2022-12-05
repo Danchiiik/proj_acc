@@ -19,8 +19,7 @@ class RegisterApiView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         
-        return Response('You have been saved well. \n We have sent you activation code', status=201)
-
+        return Response('You have been saved well. \n' 'We have sent you activation code', status=201)
 
 
 class LoginApiView(ObtainAuthToken):
