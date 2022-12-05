@@ -17,3 +17,13 @@ def send_confirmation_email(email, code):
         'dcabatar@gmail.com',
         [email],
     )
+    
+    
+
+def send_confirmation_code(email, code):
+    send_mail(
+        'Password recovery',
+        f'Here it is: {code}',
+        'dcabatar@gmail.com',
+        [email],
+    )

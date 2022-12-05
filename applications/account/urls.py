@@ -17,7 +17,10 @@ urlpatterns = [
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('send_mail/', send_hello_api_view),
-    path('activate/<uuid:activation_code>/', ActivationApiView.as_view())
+    path('activate/<uuid:activation_code>/', ActivationApiView.as_view()),
+    path('forgot_password/', ForgotPasswordApiView.as_view()),
+    path('forgot_password_complete/', ForgotPasswordCompleteApiview.as_view()),
+    
     
 ]
 

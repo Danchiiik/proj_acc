@@ -4,6 +4,7 @@ from rest_framework import serializers
 from applications.account.send_mail import send_confirmation_email
 
 User = get_user_model()
+from applications.account.send_mail import send_confirmation_code, send_confirmation_email
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -99,3 +100,52 @@ class ChangePasswordSerializer(serializers.Serializer):
         user.set_password(password)
         user.save()
         
+        
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField(required = True)
+    
+    def validate_email(self, email):
+        if not User.objects.filter(email=email).exists():
+            raise serializers.ValidationError('No such user with this email')
+        return email
+    
+    def send_code(self):
+        email = self.validated_data.get('email')
+        user = User.objects.get(email=email)
+        user.create_activation_code()
+        user.save()
+        send_confirmation_code(email, user.activation_code)
+        
+        
+class ForgotPasswordCompleteSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+    code = serializers.CharField(required=True)
+    password = serializers.CharField(required=True, min_length = 6)
+    password_confirm = serializers.CharField(required=True, min_length = 6)
+    
+    def validate_email(self, email):
+        if not User.objects.filter(email=email).exists():
+            raise serializers.ValidationError('No such user')
+        return email
+    
+    def validate_code(self, code):
+        if not User.objects.filter(activation_code=code).exists():
+            raise serializers.ValidationError('Wrong code')
+        return code
+    
+    def validate(self, attrs):
+        p1 = attrs.get('password')
+        p2 = attrs.get('password_confirm')
+        
+        if p1 != p2:
+            raise serializers.ValidationError('Passwords are not similar')
+        return attrs
+                  
+    def set_new_password(self):
+        email = self.validated_data.get('email')
+        password = self.validated_data.get('password')
+        user = User.objects.get(email=email)
+        user.set_password(password)
+        user.activation_code = ''
+        user.save()
+    
