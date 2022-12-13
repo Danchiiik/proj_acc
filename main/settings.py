@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     
     'applications.account',
     'applications.product',
+    'applications.spam',
 ]
 
 MIDDLEWARE = [
@@ -154,4 +155,8 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 
 
-# imktphhbulnwdxbi
+# for celery setting
+
+BROKER_URL = 'redis://127.0.0.1:6379/0'
+BROKER_TRANSPORT = 'redis'
+

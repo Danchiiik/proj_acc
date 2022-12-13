@@ -5,7 +5,7 @@ from applications.account.send_mail import send_confirmation_email
 
 User = get_user_model()
 from applications.account.send_mail import send_confirmation_code, send_confirmation_email
-
+from applications.account.tasks import send_confirmation_email_celery
 
 class RegisterSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(
@@ -38,13 +38,11 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         
         code = user.activation_code
-        send_confirmation_email(user.email, code)
+        # send_confirmation_email(user.email, code)
+        send_confirmation_email_celery.delay(user.email, code)
         
-        
-        user.is_active = True
         
         return user
-    
     
     
 class LoginSerializer(serializers.Serializer):
